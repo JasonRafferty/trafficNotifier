@@ -23,6 +23,7 @@ export function displayEvents(events, userTimeInMins) {
     let endTimeInMins;
     const venueId = event._embedded?.venues?.[0]?.id;
     const venueInfo = venueCapacities[venueId];
+    const venueLocation = venueInfo?.location || "Unknown Location";
 
     if (endTimeStr && endTimeStr !== "00:00:00") {
       endTimeInMins = parseTimeString(endTimeStr.slice(0, 5));
@@ -50,13 +51,17 @@ export function displayEvents(events, userTimeInMins) {
       shownCount++;
       html += `
         <li>
-          <strong>${name}</strong><br>
+          <strong>${venueLocation}</strong><br>
           Date: ${date}<br>
           Starts: ${startTimeStr !== "00:00:00" ? startTimeStr : "TBA"}
           ${
             endTimeStr && endTimeStr !== "00:00:00"
               ? `<br>Ends: ${endTimeStr}`
-              : ""
+              : `<br>Estimated End: ${Math.floor(endTimeInMins / 60)
+                .toString()
+                .padStart(2, "0")}:${(endTimeInMins % 60)
+                .toString()
+                .padStart(2, "0")}`
           }
         </li>
       `;

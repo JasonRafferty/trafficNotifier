@@ -65,7 +65,7 @@ async function fetchTodaysEvents() {
         // If there's no venue ID or capacity, exclude it
         if (!venueId || !venueCapacities[venueId]) return false;
 
-        return venueCapacities[venueId].capacity >= 20000;
+        return venueCapacities[venueId].capacity;
       });
 
       // Display events, passing userTimeInMins to highlight
