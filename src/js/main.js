@@ -50,6 +50,7 @@ async function fetchTodaysEvents() {
   const endDateTime = `${today}T23:59:59Z`;
 
   // Ticketmaster API URL to fetch today's events
+  const corsProxy = "https://cors-anywhere.herokuapp.com/";
   const apiUrl = `https://app.ticketmaster.com/discovery/v2/events.json?apikey=${apiKey}&city=${city}&countryCode=${countryCode}&startDateTime=${startDateTime}&endDateTime=${endDateTime}`;
 
   try {

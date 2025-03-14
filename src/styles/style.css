@@ -3,6 +3,11 @@
   font-family: Verdana, sans-serif;
 }
 
+h1 {
+  text-align: center;
+  letter-spacing: 0.2em; 
+}
+
 body {
   display: flex;
   justify-content: center;
@@ -22,8 +27,20 @@ body {
   border: 3px solid rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(5px);
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-  padding: 3vh 2vh;
-  border-radius: 18px;
+  padding: 2vh 4vh;
+  border-radius: 40px;
+  min-width: 300px; /* Maintain current width as the smallest size */
+  width: 50vw; /* Make it responsive */
+  max-width: 800px; /* Prevent it from becoming too large */
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; 
+  align-items: center; /* centers horizontally */
+  gap: 0.5rem; /* adds spacing between items */
+
+  height: 600px; /* Set fixed height for consistency */
+  overflow-y: auto; /* Allow scrolling if content overflows */
 }
 
 .inputSearchBar {
@@ -56,4 +73,31 @@ body {
 .inputButton:active {
   background-color: rgb(150, 150, 150);
   color: rgb(255, 255, 255);
+}
+
+@media (max-width: 600px) {
+  .mainContainer {
+    width: 90vw;
+    padding: 2vh 3vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; 
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  .inputSearchBar {
+    width: 85%;
+    font-size: 12pt;
+  }
+
+  .inputButton {
+    width: 25%; /* Improved button size for better usability on mobile */
+    font-size: 12pt;
+    padding: 8px;
+  }
 }
