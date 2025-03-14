@@ -2,6 +2,8 @@ const apiKey = "6MeXOfGABChBThe1jaanIcv1kz7RbP4T";
 
 // Import venues database
 import { venueCapacities } from "./venues.js";
+import { displayEvents } from "./displayEvents.js";
+import { parseTimeString } from "./timeUtils.js";
 
 // Event listener on button click
 document
@@ -23,13 +25,6 @@ document.getElementById("timeButton")?.addEventListener("click", () => {
   // We'll store or parse userTimeInMins in fetchTodaysEvents
   fetchTodaysEvents();
 });
-
-// Helper to parse "HH:MM" into minutes from midnight
-function parseTimeString(timeStr) {
-  // e.g., "14:30" => 14 * 60 + 30 = 870
-  const [hh, mm] = timeStr.split(":");
-  return parseInt(hh) * 60 + parseInt(mm);
-}
 
 function getUserTimeInMins() {
   const timeInput = document.getElementById("timeInput");
@@ -82,76 +77,4 @@ async function fetchTodaysEvents() {
     console.error("Error fetching today's events:", error);
     displayEvents([], undefined);
   }
-}
-
-function displayEvents(events, userTimeInMins) {
-  const eventsContainer = document.getElementById("events");
-  eventsContainer.innerHTML = "";
-
-  if (!events || events.length === 0) {
-    eventsContainer.innerHTML = "<p>No events found for today.</p>";
-    return;
-  }
-
-  let html = "<ul>";
-
-  events.forEach((event) => {
-    const name = event.name || "Unnamed Event";
-    const date = event.dates?.start?.localDate || "Unknown Date";
-    const startTimeStr = event.dates?.start?.localTime || "00:00:00";
-    const startTimeInMins = parseTimeString(startTimeStr.slice(0, 5));
-
-    // Check if there's an actual end time
-    let endTimeStr = event.dates?.end?.localTime;
-    let endTimeInMins;
-
-    // Determine if venue is football/music for estimated times
-    const venueId = event._embedded?.venues?.[0]?.id;
-    const venueInfo = venueCapacities[venueId]; // e.g., { capacity, type }
-
-    if (endTimeStr && endTimeStr !== "00:00:00") {
-      endTimeInMins = parseTimeString(endTimeStr.slice(0, 5));
-    } else {
-      // Estimate based on type
-      if (venueInfo?.type === "football") {
-        endTimeInMins = startTimeInMins + 120; // 2 hours
-      } else if (venueInfo?.type === "rugby") {
-        endTimeInMins = startTimeInMins + 120; // 3 hours
-      } else if (venueInfo?.type === "cricket") {
-        endTimeInMins = startTimeInMins + 180; // 3 hours
-      } else {
-        endTimeInMins = startTimeInMins + 120; // 3 hours
-      }
-      endTimeStr = "";
-    }
-
-    // Decide if we highlight this event
-    let highlight = false;
-    if (typeof userTimeInMins === "number") {
-      // highlight if userTimeInMins is within [start-60, end+60]
-      if (
-        userTimeInMins >= startTimeInMins - 60 &&
-        userTimeInMins <= endTimeInMins + 60
-      ) {
-        highlight = true;
-      }
-    }
-
-    // Build HTML for this event
-    html += `
-      <li style="${highlight ? "background-color: yellow;" : ""}">
-        <strong>${name}</strong><br>
-        Date: ${date}<br>
-        Starts: ${startTimeStr !== "00:00:00" ? startTimeStr : "TBA"}
-        ${
-          endTimeStr && endTimeStr !== "00:00:00"
-            ? `<br>Ends: ${endTimeStr}`
-            : ""
-        }
-      </li>
-    `;
-  });
-
-  html += "</ul>";
-  eventsContainer.innerHTML = html;
 }

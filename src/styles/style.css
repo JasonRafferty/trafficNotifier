@@ -8,7 +8,7 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-image: url("wallpaper.jpg");
+  background-image: url("/assets/wallpaper.jpg");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -41,7 +41,7 @@ body {
 
 
 .inputButton {
-  background-color: red;
+  background-color: rgb(255, 255, 255);
   border: 2px solid rgb(0, 0, 0);
   width: 10%;
   border-radius: 10px;
@@ -50,5 +50,13 @@ body {
   margin-top: 12pt;
   color: rgb(0, 0, 0);
   font-size: 12pt;
-  transition: 0.3s;
+  transition: background-color 0.3s, color 0.3s;
+}
+.inputButton:hover {
+  background-color: rgb(116, 50, 119);
+  color: rgb(255, 255, 255);
+}
+.inputButton:active {
+  background-color: rgb(150, 150, 150);
+  color: rgb(255, 255, 255);
 }
