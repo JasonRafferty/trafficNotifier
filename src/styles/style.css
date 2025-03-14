@@ -8,7 +8,7 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-image: url("/assets/wallpaper.jpg");
+  background-image: url("../../assets/wallpaper.jpg");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -17,7 +17,6 @@ body {
   color: rgb(0, 0, 0);
 }
 
-
 .mainContainer {
   background: transparent;
   border: 3px solid rgba(255, 255, 255, 0.2);
@@ -25,7 +24,6 @@ body {
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
   padding: 3vh 2vh;
   border-radius: 18px;
-
 }
 
 .inputSearchBar {
@@ -38,7 +36,6 @@ body {
   color: rgb(0, 0, 0);
   text-align: center;
 }
-
 
 .inputButton {
   background-color: rgb(255, 255, 255);
