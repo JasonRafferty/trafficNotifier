@@ -2,6 +2,8 @@ import { venueCapacities } from "./venues.js";
 import { parseTimeString } from "./timeUtils.js";
 
 export function displayEvents(events, userTimeInMins) {
+  const venuesShown = 5; //This is how many venues shown, adjust if debug needed
+
   const eventsContainer = document.getElementById("events");
   eventsContainer.innerHTML = "";
 
@@ -13,6 +15,7 @@ export function displayEvents(events, userTimeInMins) {
   let html = "<ul>";
   let shownCount = 0;
 
+  events;
   events
     .sort((a, b) => {
       const capacityA =
@@ -21,6 +24,7 @@ export function displayEvents(events, userTimeInMins) {
         venueCapacities[b._embedded?.venues?.[0]?.id]?.capacity || 0;
       return capacityB - capacityA;
     })
+    .slice(0, venuesShown) // How many venues are shown
     .forEach((event) => {
       const name = event.name || "Unnamed Event";
       const date = event.dates?.start?.localDate || "Unknown Date";
@@ -46,6 +50,8 @@ export function displayEvents(events, userTimeInMins) {
           endTimeInMins = startTimeInMins + 120; // ~2 hours
         } else if (venueDetails?.type === "cricket") {
           endTimeInMins = startTimeInMins + 180; // ~3 hours
+        } else if (venueDetails?.type === "hockey") {
+          endTimeInMins = startTimeInMins + 150; // ~2.5 hours
         } else {
           endTimeInMins = startTimeInMins + 180; // default 3 hours
         }
@@ -54,6 +60,8 @@ export function displayEvents(events, userTimeInMins) {
       console.log(
         "Venue ID:",
         venueId,
+        "Venue Name:",
+        venueLocation,
         "Capacity:",
         venueCapacities[venueId]?.capacity
       );
@@ -73,12 +81,14 @@ export function displayEvents(events, userTimeInMins) {
         <li>
           <strong>${venueLocation}</strong><br>
           Date: ${date.split("-").reverse().join("/")}<br>
-          Starts: ${startTimeStr !== "00:00:00" ? startTimeStr.slice(0,5) : "TBA"}<br>
+          Starts: ${
+            startTimeStr !== "00:00:00" ? startTimeStr.slice(0, 5) : "TBA"
+          }<br>
           Estimated End: ${Math.floor(endTimeInMins / 60)
             .toString()
             .padStart(2, "0")}:${(endTimeInMins % 60)
-            .toString()
-            .padStart(2, "0")}<br>
+          .toString()
+          .padStart(2, "0")}<br>
           Capacity: ${capacity ? capacity.toLocaleString() : "Unknown"}
         </li>
       `;

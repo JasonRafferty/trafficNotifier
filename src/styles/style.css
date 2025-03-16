@@ -37,8 +37,6 @@ body {
   flex-direction: column;
   justify-content: flex-start; 
   align-items: center; /* centers horizontally */
-  gap: 0.5rem; /* adds spacing between items */
-
   height: 600px; /* Set fixed height for consistency */
   overflow-y: auto; /* Allow scrolling if content overflows */
 }
@@ -55,13 +53,12 @@ body {
 }
 
 .inputButton {
-  background-color: rgb(255, 255, 255);
+  background: transparent;
   border: 2px solid rgb(0, 0, 0);
-  width: 10%;
+  width: 30%;
   border-radius: 10px;
   padding: 6px;
   cursor: pointer;
-  margin-top: 12pt;
   color: rgb(0, 0, 0);
   font-size: 12pt;
   transition: background-color 0.3s, color 0.3s;

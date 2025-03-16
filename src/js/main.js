@@ -8,24 +8,30 @@ import { parseTimeString } from "./timeUtils.js";
 // Event listener on button click
 document
   .getElementById("inputButton")
-  .addEventListener("click", fetchTodaysEvents);
+  .addEventListener("click", fetchEventsByDate);
 
 // Event listener on pressing Enter
 document
   .getElementById("inputSearchBar")
   .addEventListener("keydown", function (event) {
     if (event.key === "Enter") {
-      fetchTodaysEvents();
+      fetchEventsByDate();
     }
   });
 
-// Also listen to the "timeButton" if you want to highlight events by time
-document.getElementById("timeButton")?.addEventListener("click", () => {
-  // Re-display events with userTimeInMins
-  // We'll store or parse userTimeInMins in fetchTodaysEvents
-  fetchTodaysEvents();
+// Set the date input to today's date on load
+document.addEventListener("DOMContentLoaded", () => {
+  const dateInput = document.getElementById("dateInput");
+  const today = new Date().toISOString().split("T")[0]; // yyyy-mm-dd format
+  dateInput.value = today;
 });
 
+// Time button logic
+document.getElementById("timeButton")?.addEventListener("click", () => {
+  fetchEventsByDate();
+});
+
+// Parse user time input (hh:mm) to minutes
 function getUserTimeInMins() {
   const timeInput = document.getElementById("timeInput");
   if (timeInput && timeInput.value) {
@@ -34,7 +40,8 @@ function getUserTimeInMins() {
   return undefined;
 }
 
-async function fetchTodaysEvents() {
+// Fetch events for user-selected date
+async function fetchEventsByDate() {
   const city = document.getElementById("inputSearchBar").value.trim();
 
   if (!city) {
@@ -42,13 +49,20 @@ async function fetchTodaysEvents() {
     return;
   }
 
+  const dateInput = document.getElementById("dateInput").value;
+  if (!dateInput) {
+    alert("Please select a date.");
+    return;
+  }
+
+  // Build start/end times from the chosen date
+  const startDateTime = `${dateInput}T00:00:00Z`;
+  const endDateTime = `${dateInput}T23:59:59Z`;
+
   // We'll parse the user time here so we can pass it to displayEvents
   const userTimeInMins = getUserTimeInMins();
-  const today = new Date().toISOString().split("T")[0];
-  const startDateTime = `${today}T00:00:00Z`;
-  const endDateTime = `${today}T23:59:59Z`;
 
-  // Ticketmaster API URL to fetch today's events
+  // Ticketmaster API URL to fetch events on the chosen date
   const apiUrl = `https://app.ticketmaster.com/discovery/v2/events.json?apikey=${apiKey}&city=${city}&startDateTime=${startDateTime}&endDateTime=${endDateTime}`;
 
   try {
@@ -59,18 +73,20 @@ async function fetchTodaysEvents() {
 
     console.log("API Response Data:", data);
 
+    //Debug to stop events with incorrect date showing up
     if (data._embedded && data._embedded.events) {
-      // Filter events based on venue capacity (optional)
-      const filteredEvents = data._embedded.events;
-     
+      let allEvents = data._embedded.events;
+      // 2. Filter out events that don’t match chosen date exactly
+      let filteredEvents = allEvents.filter((event) => {
+        return event.dates.start.localDate === dateInput;
+      });
 
-      // Display events, passing userTimeInMins to highlight
       displayEvents(filteredEvents, userTimeInMins);
     } else {
       displayEvents([], userTimeInMins);
     }
   } catch (error) {
-    console.error("Error fetching today's events:", error);
+    console.error("Error fetching events:", error);
     displayEvents([], undefined);
   }
 }

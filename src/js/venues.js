@@ -7,6 +7,7 @@ export const venueCapacities = {
   KovZ9177z3P: { capacity: 23000, type: "music", location: "Co-op Live Manchester" }, // Co-op Live Manchester
   KovZ9177z1f: { capacity: 23000, type: "music", location: "Co-op Live Manchester" }, // Co-op Live Manchester 2
   KovZpZAnFvdA: { capacity: 260, type: "music", location: "Deaf Insititute"}, //Deaf Insititute
+  KovZpZA6kvtA: { capacity: 11770, type: "hockey", location: "SNHU Arena"}, //SNHU Arena
 
   
   // London
@@ -20,6 +21,23 @@ export const venueCapacities = {
   KovZ9177z8p: { capacity: 25000, type: "football", location: "The Valley" }, // The Valley (Charlton)
   KovZ9177z4X: { capacity: 40000, type: "football", location: "Craven Cottage" }, // Craven Cottage (Fulham)
   KovZ9177z5X: { capacity: 30500, type: "football", location: "Selhurst Park" }, // Selhurst Park (Crystal Palace)
+  KovZ9177gU0: { capacity: 1400, type: "theatre", location: "Palace Theatre" }, // Palace Theatre
+  KovZ9177yOV: { capacity: 12500, type: "music", location: "OVO Arena, Wembley" }, // OVO Arena, Wembley
+  KovZ9177E07: { capacity: 1570, type: "theatre", location: "ABBA Arena" }, // ABBA Arena
+  KovZ9177nD0: { capacity: 2100, type: "theatre", location: "Lyceum Theatre" }, // Lyceum Theatre
+  KovZ9177B9V: { capacity: 1500, type: "theatre", location: "Adelphi Theatre" }, // Adelphi Theatre
+  KovZ9177Ue7: { capacity: 1150, type: "theatre", location: "Savoy Theatre" }, // Savoy Theatre
+  KovZ9177UqV: { capacity: 1012, type: "theatre", location: "Phoenix Theatre" }, // Phoenix Theatre
+  KovZ9177U3f: { capacity: 967, type: "theatre", location: "Lyric Theatre" }, // Lyric Theatre
+  KovZ9177Uvf: { capacity: 1500, type: "theatre", location: "Sadler's Wells" }, // Sadler's Wells
+  KovZ9177HfV: { capacity: 312, type: "theatre", location: "The Other Palace" }, // The Other Palace
+  KovZ9177H_f: { capacity: 2000, type: "theatre", location: "Troubadour Wembley Park Theatre" }, // Troubadour Wembley Park Theatre
+  KovZ9177LL7: { capacity: 340, type: "theatre", location: "Sam Wanamaker Playhouse" }, // Sam Wanamaker Playhouse
+  KovZ9177VPf: { capacity: 479, type: "theatre", location: "Duchess Theatre" }, // Duchess Theatre
+  KovZ917AIfG: { capacity: 9271, type: "football", location: "Brisbane Road Stadium" }, // Brisbane Road Stadium
+  KovZ9177nD0: { capacity: 2100, type: "theatre", location: "Lyceum Theatre" }, // Lyceum Theatre
+  KovZ9177V00: { capacity: 800, type: "theatre", location: "The Lightroom" }, // The Lightroom
+  KovZpa8kCe: { capacity: 10200, type: "arena", location: "Canada Life Place" }, // Canada Life Place
 
   // Birmingham
   KovZ9177z9c: { capacity: 42785, type: "football", location: "Villa Park" }, // Villa Park (Aston Villa)
