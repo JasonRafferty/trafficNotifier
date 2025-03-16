@@ -22,21 +22,22 @@ export function displayEvents(events, userTimeInMins) {
     let endTimeStr = event.dates?.end?.localTime;
     let endTimeInMins;
     const venueId = event._embedded?.venues?.[0]?.id;
-    const venueInfo = venueCapacities[venueId];
-    const venueLocation = venueInfo?.location || "Unknown Location";
+    const venueLocation =
+      event._embedded?.venues?.[0]?.name || "Unknown Location";
 
     if (endTimeStr && endTimeStr !== "00:00:00") {
       endTimeInMins = parseTimeString(endTimeStr.slice(0, 5));
     } else {
       // Estimate durations based on type
-      if (venueInfo?.type === "football" || venueInfo?.type === "rugby") {
+      const venueDetails = venueCapacities[venueId];
+
+      if (venueDetails?.type === "football" || venueDetails?.type === "rugby") {
         endTimeInMins = startTimeInMins + 120; // ~2 hours
-      } else if (venueInfo?.type === "cricket") {
+      } else if (venueDetails?.type === "cricket") {
         endTimeInMins = startTimeInMins + 180; // ~3 hours
       } else {
         endTimeInMins = startTimeInMins + 180; // default 3 hours
       }
-      endTimeStr = "";
     }
 
     // Show only if userTimeInMins is undefined or event is in range
@@ -58,10 +59,10 @@ export function displayEvents(events, userTimeInMins) {
             endTimeStr && endTimeStr !== "00:00:00"
               ? `<br>Ends: ${endTimeStr}`
               : `<br>Estimated End: ${Math.floor(endTimeInMins / 60)
-                .toString()
-                .padStart(2, "0")}:${(endTimeInMins % 60)
-                .toString()
-                .padStart(2, "0")}`
+                  .toString()
+                  .padStart(2, "0")}:${(endTimeInMins % 60)
+                  .toString()
+                  .padStart(2, "0")}`
           }
         </li>
       `;

@@ -36,7 +36,6 @@ function getUserTimeInMins() {
 
 async function fetchTodaysEvents() {
   const city = document.getElementById("inputSearchBar").value.trim();
-  const countryCode = "GB";
 
   if (!city) {
     alert("Please enter a city name.");
@@ -50,8 +49,7 @@ async function fetchTodaysEvents() {
   const endDateTime = `${today}T23:59:59Z`;
 
   // Ticketmaster API URL to fetch today's events
-  const corsProxy = "https://cors-anywhere.herokuapp.com/";
-  const apiUrl = `https://app.ticketmaster.com/discovery/v2/events.json?apikey=${apiKey}&city=${city}&countryCode=${countryCode}&startDateTime=${startDateTime}&endDateTime=${endDateTime}`;
+  const apiUrl = `https://app.ticketmaster.com/discovery/v2/events.json?apikey=${apiKey}&city=${city}&startDateTime=${startDateTime}&endDateTime=${endDateTime}`;
 
   try {
     const response = await fetch(apiUrl);
@@ -59,15 +57,12 @@ async function fetchTodaysEvents() {
 
     const data = await response.json();
 
+    console.log("API Response Data:", data);
+
     if (data._embedded && data._embedded.events) {
       // Filter events based on venue capacity (optional)
-      const filteredEvents = data._embedded.events.filter((event) => {
-        const venueId = event._embedded?.venues?.[0]?.id;
-        // If there's no venue ID or capacity, exclude it
-        if (!venueId || !venueCapacities[venueId]) return false;
-
-        return venueCapacities[venueId].capacity;
-      });
+      const filteredEvents = data._embedded.events;
+     
 
       // Display events, passing userTimeInMins to highlight
       displayEvents(filteredEvents, userTimeInMins);
