@@ -1,32 +1,35 @@
-const apiKey = "6MeXOfGABChBThe1jaanIcv1kz7RbP4T";
-
-// Import venues database
+// Import local modules
 import { venueCapacities } from "./venues.js";
 import { displayEvents } from "./displayEvents.js";
 import { parseTimeString } from "./timeUtils.js";
 
-// Event listener on button click
-document
-  .getElementById("inputButton")
-  .addEventListener("click", fetchEventsByDate);
+// ========== 1. INITIALISATION ==========
 
-// Event listener on pressing Enter
-document
-  .getElementById("inputSearchBar")
-  .addEventListener("keydown", function (event) {
-    if (event.key === "Enter") {
-      fetchEventsByDate();
-    }
-  });
-
-// Set the date input to today's date on load
 document.addEventListener("DOMContentLoaded", () => {
+  // Set the date input to today's date
   const dateInput = document.getElementById("dateInput");
-  const today = new Date().toISOString().split("T")[0]; // yyyy-mm-dd format
+  const today = new Date().toISOString().split("T")[0]; // yyyy-mm-dd
   dateInput.value = today;
+
+  // Attach listeners
+  //Search by button click
+  document
+    .getElementById("inputButton")
+    .addEventListener("click", handleSearchButton);
+
+  //Search by enter
+  document
+    .getElementById("inputSearchBar")
+    .addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        handleSearchButton();
+      }
+    });
 });
 
-// Parse user time input (hh:mm) to minutes
+// ========== 2. HELPER FUNCTIONS ==========
+
+// Reads user's time input and returns total minutes, or undefined if none
 function getUserTimeInMins() {
   const timeInput = document.getElementById("timeInput");
   if (timeInput && timeInput.value) {
@@ -35,10 +38,17 @@ function getUserTimeInMins() {
   return undefined;
 }
 
-// Fetch events for user-selected date
-async function fetchEventsByDate() {
-  const city = document.getElementById("inputSearchBar").value.trim();
+// Called when the user presses the "Search" button or hits Enter
+function handleSearchButton() {
+  //Call both APIS
+  fetchTicketmasterEvents();
+  fetchFootballMatches(); //https://www.thesportsdb.com/docs_api_examples
+}
 
+// ========== 3. TICKETMASTER FETCH ==========
+
+async function fetchTicketmasterEvents() {
+  const city = document.getElementById("inputSearchBar").value.trim();
   if (!city) {
     alert("Please enter a city name.");
     return;
@@ -50,38 +60,75 @@ async function fetchEventsByDate() {
     return;
   }
 
+  const userTimeInMins = getUserTimeInMins();
+
   // Build start/end times from the chosen date
   const startDateTime = `${dateInput}T00:00:00Z`;
   const endDateTime = `${dateInput}T23:59:59Z`;
 
-  // We'll parse the user time here so we can pass it to displayEvents
-  const userTimeInMins = getUserTimeInMins();
-
-  // Ticketmaster API URL to fetch events on the chosen date
-  const apiUrl = `https://app.ticketmaster.com/discovery/v2/events.json?apikey=${apiKey}&city=${city}&startDateTime=${startDateTime}&endDateTime=${endDateTime}`;
+  // Ticketmaster API key & URL
+  const tmApiKey = "6MeXOfGABChBThe1jaanIcv1kz7RbP4T";
+  const tmApiUrl = `https://app.ticketmaster.com/discovery/v2/events.json?apikey=${tmApiKey}&city=${city}&startDateTime=${startDateTime}&endDateTime=${endDateTime}`;
 
   try {
-    const response = await fetch(apiUrl);
-    if (!response.ok) throw new Error("Failed to fetch events");
+    const response = await fetch(tmApiUrl);
+    if (!response.ok) throw new Error("Failed to fetch Ticketmaster events");
 
     const data = await response.json();
+    console.log("Ticketmaster API Response:", data);
 
-    console.log("API Response Data:", data);
-
-    //Debug to stop events with incorrect date showing up
     if (data._embedded && data._embedded.events) {
-      let allEvents = data._embedded.events;
-      // 2. Filter out events that don’t match chosen date exactly
-      let filteredEvents = allEvents.filter((event) => {
+      // Filter out events that don’t match the chosen date exactly
+      const filteredEvents = data._embedded.events.filter((event) => {
         return event.dates.start.localDate === dateInput;
       });
-
       displayEvents(filteredEvents, userTimeInMins);
     } else {
       displayEvents([], userTimeInMins);
     }
   } catch (error) {
-    console.error("Error fetching events:", error);
+    console.error("Error fetching Ticketmaster events:", error);
     displayEvents([], undefined);
+  }
+}
+
+// ========== 4. FOOTBALL-DATA FETCH ==========
+
+async function fetchFootballMatches() {
+  // 1. Get the user-chosen date from your existing date input
+  const dateInput = document.getElementById("dateInput").value; // "YYYY-MM-DD"
+
+  // 2. TheSportsDB endpoint for upcoming Arsenal matches
+  const apiUrl = "https://www.thesportsdb.com/api/v1/json/3/eventsnext.php?id=133604";
+
+  try {
+    // 3. Fetch the data
+    const response = await fetch(apiUrl);
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    // 4. Parse the JSON
+    const data = await response.json();
+    console.log("Raw TheSportsDB Data:", data);
+
+    // 5. Check if events exist
+    if (data.events && data.events.length > 0) {
+      // 6. Filter matches by user-chosen date
+      const filteredEvents = data.events.filter(event => event.dateEvent === dateInput);
+
+      // 7. Log the results
+      if (filteredEvents.length > 0) {
+        filteredEvents.forEach(event => {
+          console.log(`Match Date: ${event.dateEvent}, Stadium: ${event.strVenue}`);
+        });
+      } else {
+        console.log("No matches found on that date.");
+      }
+    } else {
+      console.log("No upcoming events found for Arsenal.");
+    }
+  } catch (error) {
+    console.error("Unable to fetch data:", error);
   }
 }

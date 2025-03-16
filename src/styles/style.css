@@ -5,7 +5,12 @@
 
 h1 {
   text-align: center;
-  letter-spacing: 0.2em; 
+  letter-spacing: 0.2em;
+}
+
+h3 {
+  margin-top: 0px;
+  margin-bottom: -15px;
 }
 
 body {
@@ -35,7 +40,7 @@ body {
 
   display: flex;
   flex-direction: column;
-  justify-content: flex-start; 
+  justify-content: flex-start;
   align-items: center; /* centers horizontally */
   height: 600px; /* Set fixed height for consistency */
   overflow-y: auto; /* Allow scrolling if content overflows */
@@ -55,17 +60,18 @@ body {
 .inputButton {
   background-color: transparent;
   border: 2px solid rgb(0, 0, 0);
+  backdrop-filter: blur(50px);
   height: 25px;
-  width: 80%; 
-  min-width: 90px; 
-  max-width: 150px; 
+  width: 80%;
+  min-width: 90px;
+  max-width: 150px;
   border-radius: 10px;
-  padding: 10px; 
+  padding: 10px;
   cursor: pointer;
   color: rgba(0, 0, 0, 0.7);
-  font-size: 6pt; 
+  font-size: 6pt;
   transition: 0.3s ease-in-out;
-  text-align: center; 
+  text-align: center;
   display: flex; /* Ensures text is centered */
   justify-content: center;
   align-items: center;
@@ -76,53 +82,16 @@ button.inputButton:hover {
 }
 
 button.inputButton:active {
-  transform: scale(0.90); /* Subtle shrink effect on click */
+  transform: scale(0.9); /* Subtle shrink effect on click */
 }
 
 .inputSearchBar {
-
   background: transparent;
-
 }
 
 .inputDate {
-
-  background: transparent;
- 
-}
-
-.timeButton{
-
   background: transparent;
 }
-
-.timeButton {
-  background-color: transparent;
-  border: 2px solid rgb(0, 0, 0);
-  height: 25px;
-  width: 80%; 
-  min-width: 90px; 
-  max-width: 150px; 
-  border-radius: 10px;
-  padding: 10px; 
-  cursor: pointer;
-  color: rgba(0, 0, 0, 0.7);
-  font-size: 6pt; 
-  transition: 0.3s ease-in-out;
-  text-align: center; 
-  display: flex; /* Ensures text is centered */
-  justify-content: center;
-  align-items: center;
-}
-
-button.timeButton:hover {
-  background-color: rgba(255, 255, 255, 0.3);
-}
-
-button.timeButton:active {
-  transform: scale(0.90); /* Subtle shrink effect on click */
-}
-
 
 /* making mobile compatibility*/
 @media (max-width: 600px) {
@@ -131,7 +100,7 @@ button.timeButton:active {
     padding: 2vh 3vh;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start; 
+    justify-content: flex-start;
     align-items: center;
     gap: 0.5rem;
   }

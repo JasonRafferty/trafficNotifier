@@ -8,7 +8,7 @@ export function displayEvents(events, userTimeInMins) {
   eventsContainer.innerHTML = "";
 
   if (!events || events.length === 0) {
-    eventsContainer.innerHTML = "<p>No events found for today.</p>";
+    eventsContainer.innerHTML = "<p>No events found for that date.</p>";
     return;
   }
 
