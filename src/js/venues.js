@@ -5,7 +5,10 @@ export const venueCapacities = {
   KovZ9177A4f: { capacity: 21000, type: "music", location: "AO Arena" }, // AO Arena
   KovZ9177z31: { capacity: 26000, type: "cricket", location: "Emirates Old Trafford" }, // Emirates Old Trafford (Cricket)
   KovZ9177z3P: { capacity: 23000, type: "music", location: "Co-op Live Manchester" }, // Co-op Live Manchester
+  KovZ9177z1f: { capacity: 23000, type: "music", location: "Co-op Live Manchester" }, // Co-op Live Manchester 2
+  KovZpZAnFvdA: { capacity: 260, type: "music", location: "Deaf Insititute"}, //Deaf Insititute
 
+  
   // London
   KovZ9177z1e: { capacity: 90000, type: "football", location: "Wembley Stadium" }, // Wembley Stadium
   KovZ9177z5f: { capacity: 82000, type: "rugby", location: "Twickenham Stadium" }, // Twickenham Stadium

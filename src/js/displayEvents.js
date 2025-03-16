@@ -13,61 +13,77 @@ export function displayEvents(events, userTimeInMins) {
   let html = "<ul>";
   let shownCount = 0;
 
-  events.forEach((event) => {
-    const name = event.name || "Unnamed Event";
-    const date = event.dates?.start?.localDate || "Unknown Date";
-    const startTimeStr = event.dates?.start?.localTime || "00:00:00";
-    const startTimeInMins = parseTimeString(startTimeStr.slice(0, 5));
+  events
+    .sort((a, b) => {
+      const capacityA =
+        venueCapacities[a._embedded?.venues?.[0]?.id]?.capacity || 0;
+      const capacityB =
+        venueCapacities[b._embedded?.venues?.[0]?.id]?.capacity || 0;
+      return capacityB - capacityA;
+    })
+    .forEach((event) => {
+      const name = event.name || "Unnamed Event";
+      const date = event.dates?.start?.localDate || "Unknown Date";
+      const startTimeStr = event.dates?.start?.localTime || "00:00:00";
+      const startTimeInMins = parseTimeString(startTimeStr.slice(0, 5));
 
-    let endTimeStr = event.dates?.end?.localTime;
-    let endTimeInMins;
-    const venueId = event._embedded?.venues?.[0]?.id;
-    const venueLocation =
-      event._embedded?.venues?.[0]?.name || "Unknown Location";
+      let endTimeStr = event.dates?.end?.localTime;
+      let endTimeInMins;
+      const venueId = event._embedded?.venues?.[0]?.id;
+      const venueLocation =
+        event._embedded?.venues?.[0]?.name || "Unknown Location";
 
-    if (endTimeStr && endTimeStr !== "00:00:00") {
-      endTimeInMins = parseTimeString(endTimeStr.slice(0, 5));
-    } else {
-      // Estimate durations based on type
-      const venueDetails = venueCapacities[venueId];
-
-      if (venueDetails?.type === "football" || venueDetails?.type === "rugby") {
-        endTimeInMins = startTimeInMins + 120; // ~2 hours
-      } else if (venueDetails?.type === "cricket") {
-        endTimeInMins = startTimeInMins + 180; // ~3 hours
+      if (endTimeStr && endTimeStr !== "00:00:00") {
+        endTimeInMins = parseTimeString(endTimeStr.slice(0, 5));
       } else {
-        endTimeInMins = startTimeInMins + 180; // default 3 hours
+        // Estimate durations based on type
+        const venueDetails = venueCapacities[venueId];
+
+        if (
+          venueDetails?.type === "football" ||
+          venueDetails?.type === "rugby"
+        ) {
+          endTimeInMins = startTimeInMins + 120; // ~2 hours
+        } else if (venueDetails?.type === "cricket") {
+          endTimeInMins = startTimeInMins + 180; // ~3 hours
+        } else {
+          endTimeInMins = startTimeInMins + 180; // default 3 hours
+        }
       }
-    }
 
-    // Show only if userTimeInMins is undefined or event is in range
-    let showThisEvent = true;
-    if (typeof userTimeInMins === "number") {
-      showThisEvent =
-        userTimeInMins >= startTimeInMins - 60 &&
-        userTimeInMins <= endTimeInMins + 60;
-    }
+      console.log(
+        "Venue ID:",
+        venueId,
+        "Capacity:",
+        venueCapacities[venueId]?.capacity
+      );
 
-    if (showThisEvent) {
-      shownCount++;
-      html += `
+      // Show only if userTimeInMins is undefined or event is in range
+      let showThisEvent = true;
+      if (typeof userTimeInMins === "number") {
+        showThisEvent =
+          userTimeInMins >= startTimeInMins - 60 &&
+          userTimeInMins <= endTimeInMins + 60;
+      }
+
+      if (showThisEvent) {
+        shownCount++;
+        const capacity = venueCapacities[venueId]?.capacity;
+        html += `
         <li>
           <strong>${venueLocation}</strong><br>
-          Date: ${date}<br>
-          Starts: ${startTimeStr !== "00:00:00" ? startTimeStr : "TBA"}
-          ${
-            endTimeStr && endTimeStr !== "00:00:00"
-              ? `<br>Ends: ${endTimeStr}`
-              : `<br>Estimated End: ${Math.floor(endTimeInMins / 60)
-                  .toString()
-                  .padStart(2, "0")}:${(endTimeInMins % 60)
-                  .toString()
-                  .padStart(2, "0")}`
-          }
+          Date: ${date.split("-").reverse().join("/")}<br>
+          Starts: ${startTimeStr !== "00:00:00" ? startTimeStr.slice(0,5) : "TBA"}<br>
+          Estimated End: ${Math.floor(endTimeInMins / 60)
+            .toString()
+            .padStart(2, "0")}:${(endTimeInMins % 60)
+            .toString()
+            .padStart(2, "0")}<br>
+          Capacity: ${capacity ? capacity.toLocaleString() : "Unknown"}
         </li>
       `;
-    }
-  });
+      }
+    });
 
   html += "</ul>";
 
