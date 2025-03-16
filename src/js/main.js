@@ -26,11 +26,6 @@ document.addEventListener("DOMContentLoaded", () => {
   dateInput.value = today;
 });
 
-// Time button logic
-document.getElementById("timeButton")?.addEventListener("click", () => {
-  fetchEventsByDate();
-});
-
 // Parse user time input (hh:mm) to minutes
 function getUserTimeInMins() {
   const timeInput = document.getElementById("timeInput");

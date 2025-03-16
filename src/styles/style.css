@@ -47,31 +47,84 @@ body {
   background: transparent;
   outline: none;
   border: 2px solid rgb(0, 0, 0);
-  border-radius: 20px;
+  border-radius: 10px;
   color: rgb(0, 0, 0);
   text-align: center;
 }
 
 .inputButton {
-  background: transparent;
+  background-color: transparent;
   border: 2px solid rgb(0, 0, 0);
-  width: 30%;
+  height: 25px;
+  width: 80%; 
+  min-width: 90px; 
+  max-width: 150px; 
   border-radius: 10px;
-  padding: 6px;
+  padding: 10px; 
   cursor: pointer;
-  color: rgb(0, 0, 0);
-  font-size: 12pt;
-  transition: background-color 0.3s, color 0.3s;
-}
-.inputButton:hover {
-  background-color: rgb(116, 50, 119);
-  color: rgb(255, 255, 255);
-}
-.inputButton:active {
-  background-color: rgb(150, 150, 150);
-  color: rgb(255, 255, 255);
+  color: rgba(0, 0, 0, 0.7);
+  font-size: 6pt; 
+  transition: 0.3s ease-in-out;
+  text-align: center; 
+  display: flex; /* Ensures text is centered */
+  justify-content: center;
+  align-items: center;
 }
 
+button.inputButton:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+button.inputButton:active {
+  transform: scale(0.90); /* Subtle shrink effect on click */
+}
+
+.inputSearchBar {
+
+  background: transparent;
+
+}
+
+.inputDate {
+
+  background: transparent;
+ 
+}
+
+.timeButton{
+
+  background: transparent;
+}
+
+.timeButton {
+  background-color: transparent;
+  border: 2px solid rgb(0, 0, 0);
+  height: 25px;
+  width: 80%; 
+  min-width: 90px; 
+  max-width: 150px; 
+  border-radius: 10px;
+  padding: 10px; 
+  cursor: pointer;
+  color: rgba(0, 0, 0, 0.7);
+  font-size: 6pt; 
+  transition: 0.3s ease-in-out;
+  text-align: center; 
+  display: flex; /* Ensures text is centered */
+  justify-content: center;
+  align-items: center;
+}
+
+button.timeButton:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+button.timeButton:active {
+  transform: scale(0.90); /* Subtle shrink effect on click */
+}
+
+
+/* making mobile compatibility*/
 @media (max-width: 600px) {
   .mainContainer {
     width: 90vw;
